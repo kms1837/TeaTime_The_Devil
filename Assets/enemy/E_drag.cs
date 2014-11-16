@@ -7,6 +7,8 @@ public class E_drag : MonoBehaviour {
 	Vector3 mouse_end = new Vector3 (0, 0, 0);
 	float t = 0f;
 	float g = 9.80665f;
+	bool heightToDeath = false;
+
 	
 	IEnumerator OnMouseDown()
 	{
@@ -27,24 +29,17 @@ public class E_drag : MonoBehaviour {
 	}
 
 	void Update(){
-		if(mouse_start != new Vector3 (0, 0, 0) && mouse_end != new Vector3 (0, 0, 0)){
-			float vx, vy, x, y, x2, y2, t2, vx2, vy2;
-			x = mouse_end.x - mouse_start.x;
-			y = mouse_end.y - mouse_start.y;
-			vx = x/t;
-			vy = y/t;
-			t2 = vy/g;
-			x2 = vx*x*t2;
-			y2 = vy*y*t2 - 0.5f*g*t2*t2;
-			vx2 = x2/t2;
-			vy2 = y2/t2;
-			/*if(t>0){
-				t = t - Time.deltaTime;
-				transform.Translate(vx2, vy2, 0);
-			}
-			else if(transform.position.y!=0) {
-				transform.Translate(vx2, 0, 0);
-			}*/
+		if(transform.position.y > 15){
+			heightToDeath = true;
+		}
+		if (heightToDeath == true && this.transform.position.y < 2.0f) {
+			this.SendMessage ("HPzero");
+		}
+	}
+
+	void OnTriggerEnter (Collider other){
+		if (heightToDeath == true) {
+			this.SendMessage ("HPzero");
 		}
 	}
 }
