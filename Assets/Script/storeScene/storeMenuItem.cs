@@ -6,7 +6,7 @@ public class storeMenuItem : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		
 	}
 	
 	// Update is called once per frame
@@ -18,11 +18,14 @@ public class storeMenuItem : MonoBehaviour {
 	}
 	
 	void OnMouseOver() {
-		gameObject.renderer.material.color = Color.red;
+		if(menuNumber == 0) gameObject.renderer.material.color = Color.blue;
+		else 				gameObject.renderer.material.color = Color.red;
 	}
 	
 	void OnMouseExit() {
-		gameObject.renderer.material.color = Color.white;
+
+		if(menuNumber == 0) gameObject.renderer.material.color = Color.gray;
+		else 				gameObject.renderer.material.color = Color.white;
 	}
 	
 	void OnMouseDown() {

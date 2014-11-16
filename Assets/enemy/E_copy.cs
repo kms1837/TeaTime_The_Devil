@@ -27,7 +27,8 @@ public class E_copy : MonoBehaviour {
 				count--;
 				GameObject Enemy = GameObject.FindWithTag("enemyTag");
 				GameObject prefEnemy;
-				prefEnemy = Instantiate(Enemy, transform.position, Quaternion.identity)as GameObject;
+				prefEnemy = Instantiate(Enemy, transform.position, Quaternion.Euler(90, 0, 0))as GameObject;
+				//Quaternion.identity
 				curE_quant++;
 				if(count == 0){
 					count_time--;
