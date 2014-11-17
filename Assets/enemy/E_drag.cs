@@ -32,7 +32,7 @@ public class E_drag : MonoBehaviour {
 		if(transform.position.y > 15){
 			heightToDeath = true;
 		}
-		if (heightToDeath == true && this.transform.position.y < 2.0f) {
+		if (heightToDeath == true && this.transform.position.y < 4.0f) {
 			this.SendMessage ("HPzero");
 		}
 	}

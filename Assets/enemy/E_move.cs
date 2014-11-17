@@ -27,7 +27,7 @@ public class E_move : MonoBehaviour {
 			transform.Translate (-E_position, 0, 0);
 		}
 
-		Debug.Log("y position : " + transform.position.y);
-		Debug.Log("x position : " + transform.position.x);
+		//Debug.Log("y position : " + transform.position.y);
+		//Debug.Log("x position : " + transform.position.x);
 	}
 }

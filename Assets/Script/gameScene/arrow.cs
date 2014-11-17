@@ -28,6 +28,14 @@ public class arrow : MonoBehaviour {
 
 	void OnTriggerEnter (Collider enemy){
 		enemy.SendMessage ("HPzero");
+
+		GameObject stageObejct = GameObject.Find("MainCamera");
+		StageManagment stageManagment = stageObejct.GetComponent<StageManagment>();
+		stageManagment.deadCount++;
+
+		Destroy(this.gameObject);
+
+		//Debug.Log(stageManagment.deadCount + " dead");
 	}
 
 }
