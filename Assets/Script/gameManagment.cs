@@ -34,6 +34,9 @@ public class gameManagment : MonoBehaviour {
 	public int getGold()		  { return gold; }
 
 	public void nextDay(){day = day+1;}
+	public void setCastleHp(float inputHp) 		 { castleHp = inputHp; }
+	public void setCastleHpMax(float inputHpMax) { castleHpMax = inputHpMax; }
+	public void setGold(int inputGold) 			 { gold = inputGold; }
 
 	public gameManagment()
 	{

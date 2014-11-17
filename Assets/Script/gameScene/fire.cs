@@ -7,4 +7,12 @@ public class fire : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	void OnTriggerEnter (Collider enemy){
+		enemy.SendMessage ("HPzero");
+		
+		GameObject stageObejct = GameObject.Find("MainCamera");
+		StageManagment stageManagment = stageObejct.GetComponent<StageManagment>();
+		stageManagment.deadCount++;
+	}
 }
