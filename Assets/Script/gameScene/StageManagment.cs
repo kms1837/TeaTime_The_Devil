@@ -26,5 +26,9 @@ public class StageManagment : MonoBehaviour {
 			Application.LoadLevel("StoreScene");
 			deadCount = 0;
 		}
+
+		if(gameManagment.Instance.getCastleHp() < 0){
+			Application.LoadLevel("GameOverScene");
+		}
 	}
 }

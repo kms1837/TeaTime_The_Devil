@@ -3,7 +3,7 @@ using System.Collections;
 
 public class gameManagment : MonoBehaviour {
 	public static gameManagment _instance;
-	static GameObject container = null;
+	//static GameObject container = null;
 
 	private float castleHp, castleHpMax;
 	private int day;
@@ -15,7 +15,7 @@ public class gameManagment : MonoBehaviour {
 		{
 			if (_instance == null)
 			{
-				container = new GameObject();
+				GameObject container = new GameObject();
 				container.name = typeof(gameManagment).ToString ();
 				_instance = container.AddComponent(typeof(gameManagment)) as gameManagment;
 				

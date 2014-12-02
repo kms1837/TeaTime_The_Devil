@@ -20,8 +20,8 @@ public class weponSystem : MonoBehaviour {
 
 	void Start () {
 		selectedWepon = 0;
-		weponMenuItemObject = new GameObject[4];
-		weponColor  = new Color[]{Color.green, Color.red, Color.blue, Color.gray};
+		weponMenuItemObject = new GameObject[6];
+		weponColor  = new Color[]{Color.green, Color.red, Color.blue, Color.gray, Color.black, Color.green};
 		arrowSwitch = true;
 		fireSwitch  = true;
 		//GameObject testPrefab = (GameObject)Resources.Load("/Prefabs/yourPrefab");
@@ -82,7 +82,24 @@ public class weponSystem : MonoBehaviour {
 	}
 
 	void OnMouseDown() {
+
 		weponMenuItem setWeponMenuItem;
+		float setPositionX, setPositionY;
+
+		for (int i = 0; i < 6; i++) {          
+			float deg = 360 / 6 * i;
+			float radian = deg * Mathf.PI/180;
+
+			setPositionX = this.transform.position.x + 3 * Mathf.Cos(radian);
+			setPositionY = this.transform.position.y + 3 * Mathf.Sin(radian);
+
+			weponMenuItemObject[i] = Instantiate (weponMenuItemPrefab, new Vector3 (setPositionX, setPositionY, 6),  Quaternion.Euler(90, 0, 0))as GameObject;
+			setWeponMenuItem = weponMenuItemObject[i].GetComponent<weponMenuItem>();
+			setWeponMenuItem.weponNumber = i + 1;
+			setWeponMenuItem.setColor = weponColor[i];
+		}
+
+		/*
 		weponMenuItemObject[0] = Instantiate (weponMenuItemPrefab, new Vector3 (this.transform.position.x - 6, this.transform.position.y + 2, 6),  Quaternion.Euler(90, 0, 0))as GameObject;
 		setWeponMenuItem = weponMenuItemObject[0].GetComponent<weponMenuItem>();
 		setWeponMenuItem.weponNumber = 1;
@@ -102,6 +119,7 @@ public class weponSystem : MonoBehaviour {
 		setWeponMenuItem = weponMenuItemObject[3].GetComponent<weponMenuItem>();
 		setWeponMenuItem.weponNumber = 4;
 		setWeponMenuItem.setColor = Color.gray;
+		*/
 	}
 
 }
