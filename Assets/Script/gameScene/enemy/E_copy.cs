@@ -8,18 +8,24 @@ public class E_copy : MonoBehaviour {
 	public int E_quantity = 0;
 	int count;
 	int curE_quant = 0;
-	public Vector2 enemyAppearanceFrequency = new Vector2 (0, 0);
+	float AFmin, AFmax;
 
 	// Use this for initialization
 	void Start () {
 		count_time = 0;
 		count = E_quantity;
+		AFmin = 200f - (float)(gameManagment.Instance.getDay ())*1.9f;
+		AFmax = 400f - (float)(gameManagment.Instance.getDay ())*2f;
+	}
+
+	void countMinus() {
+		curE_quant--;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (count_time == 0) {	
-			rand = Random.Range ((int)enemyAppearanceFrequency.x, (int)enemyAppearanceFrequency.y);
+			rand = (int)Random.Range (AFmin, AFmax);
 			count_time = rand;
 		} else {
 			count_time--; 
@@ -36,7 +42,9 @@ public class E_copy : MonoBehaviour {
 			}		
 		}
 		if (count == 0 && curE_quant == 0) {
-			//스테이지 클리어
+			GameObject stageObejct = GameObject.Find("MainCamera");
+			StageManagment stageManagment = stageObejct.GetComponent<StageManagment>();
+			stageManagment.Finished();
 		}
 	}
 }

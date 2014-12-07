@@ -12,7 +12,7 @@ public class E_drag : MonoBehaviour {
 	
 	IEnumerator OnMouseDown()
 	{
-		mouse_start = Camera.main.WorldToScreenPoint (Input.mousePosition);
+		mouse_start = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		Vector3 scrSpace = Camera.main.WorldToScreenPoint (transform.position);
 		Vector3 offset = transform.position - Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, scrSpace.z));
 		
@@ -25,14 +25,14 @@ public class E_drag : MonoBehaviour {
 			t = t + Time.deltaTime;
 			yield return null;
 		}
-		mouse_end = Camera.main.WorldToScreenPoint (Input.mousePosition);
+		mouse_end = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 	}
 
 	void Update(){
 		if(transform.position.y > 15){
 			heightToDeath = true;
 		}
-		if (heightToDeath == true && this.transform.position.y < 4.0f) {
+		if (heightToDeath == true && this.transform.position.y < 3.0f) {
 			this.SendMessage ("HPzero");
 		}
 	}

@@ -10,10 +10,14 @@ public class weponSystem : MonoBehaviour {
 	public GameObject firePrefab;
 	public GameObject weponMenuItemPrefab;
 
+	public Texture testT;
+
 	private int selectedWepon;
-	private bool arrowSwitch, fireSwitch;
+	private bool arrowSwitch, fireSwitch, weponMenuOpen;
 	private GameObject[] weponMenuItemObject;
 	private Color[] weponColor;
+
+	private int menuItemGap; //menu item gap
 
 	void arrowCoolingTime(){ arrowSwitch = true; }
 	void fireCoolingTime() { fireSwitch  = true; }
@@ -24,15 +28,41 @@ public class weponSystem : MonoBehaviour {
 		weponColor  = new Color[]{Color.green, Color.red, Color.blue, Color.gray, Color.black, Color.green};
 		arrowSwitch = true;
 		fireSwitch  = true;
-		//GameObject testPrefab = (GameObject)Resources.Load("/Prefabs/yourPrefab");
+		menuItemGap = 60;
 	}
 
 	void Update () {
+
+		if(weponMenuOpen) {
+			weponMenuItem getWeponMenuItem;
+			float itemPositionX, itemPositionY;
+
+			Vector3 screenMousePosition = Input.mousePosition;
+
+			for (int i=0; i<weponMenuItemObject.Length; i++) {
+				getWeponMenuItem = weponMenuItemObject[i].GetComponent<weponMenuItem>();
+				itemPositionX 	 = getWeponMenuItem.positionX;
+				itemPositionY 	 = Screen.height - getWeponMenuItem.positionY;
+				//스크린 좌표계의 최상단은 스크린 높이를 600이라 하면 ex)(0, 600) 이지만 drawTexture는 최상단이 (0, 0)기준으로 그린다.
+
+				if(	  screenMousePosition.x >= itemPositionX && screenMousePosition.x <= itemPositionX + 50
+				   && screenMousePosition.y <= itemPositionY && screenMousePosition.y >= itemPositionY - 50)
+				{
+					getWeponMenuItem.mouseOver = true;
+				}else{
+					getWeponMenuItem.mouseOver = false;
+				}
+			}
+		}
+
 		if (Input.GetMouseButtonDown (0)) {
-			Vector3 originMousePosition = Input.mousePosition;
-			originMousePosition.z = 26;
-			
-			Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(originMousePosition);
+			//Vector3 originMousePosition = Input.mousePosition;
+			//originMousePosition.z = 26;
+			//Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(originMousePosition);
+
+			Vector3 scrPos = Camera.main.WorldToScreenPoint(transform.position);
+			Vector3 curScrPos = new Vector3 (Input.mousePosition.x, Input.mousePosition.y, scrPos.z);
+			Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(curScrPos);
 
 			switch(selectedWepon){
 				case 1:{
@@ -44,7 +74,10 @@ public class weponSystem : MonoBehaviour {
 						arrow arrowObject = (arrow)weponObject.GetComponent<arrow>();
 						arrowObject.mousePosition = worldMousePosition;
 						arrowObject.arrowRotation = arrowRotation;
-						
+
+						gameObject.renderer.material.color = Color.white;
+						selectedWepon = 3;	
+
 						arrowSwitch = false;
 					}
 					break;
@@ -54,6 +87,9 @@ public class weponSystem : MonoBehaviour {
 						Invoke("fireCoolingTime", 3.0f);
 
 						GameObject weponObject = Instantiate (firePrefab, new Vector3 (worldMousePosition.x, worldMousePosition.y, this.transform.position.z), Quaternion.Euler(-90, 0, 0))as GameObject;
+						
+						gameObject.renderer.material.color = Color.white;
+						selectedWepon = 3;
 
 						fireSwitch = false;
 					}
@@ -64,19 +100,33 @@ public class weponSystem : MonoBehaviour {
 	}
 
 	void OnMouseUp() {
+
 		weponMenuItem getWeponMenuItem;
+		float itemPositionX, itemPositionY;
+
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 
+		Vector3 screenMousePosition = Input.mousePosition;
+
+		//Debug.Log(screenMousePosition);
+
+		weponMenuOpen = false;
+
 		for (int i=0; i<weponMenuItemObject.Length; i++) {
-			if (Physics.Raycast (ray, out hit)) {
-				getWeponMenuItem = (weponMenuItem)weponMenuItemObject [i].GetComponent<weponMenuItem> ();
-				if (getWeponMenuItem == hit.transform.GetComponent<weponMenuItem>()) { //weponMenuItemObject [i].gameObject.collider.Raycast (ray, out hit)
-					gameObject.renderer.material.color = weponColor[getWeponMenuItem.weponNumber-1];
-					selectedWepon = getWeponMenuItem.weponNumber;
-					//Debug.Log (getWeponMenuItem.weponNumber);
-				}
+			getWeponMenuItem = weponMenuItemObject[i].GetComponent<weponMenuItem>();
+			itemPositionX = getWeponMenuItem.positionX;
+			itemPositionY = Screen.height - getWeponMenuItem.positionY;
+			//스크린 좌표계의 최상단은 스크린 높이를 600이라 하면 ex)(0, 600) 이지만 drawTexture는 최상단이 (0, 0)기준으로 그린다.
+
+			if(	  screenMousePosition.x >= itemPositionX && screenMousePosition.x <= itemPositionX + 50
+			   && screenMousePosition.y <= itemPositionY && screenMousePosition.y >= itemPositionY - 50)
+			{
+
+				gameObject.renderer.material.color = weponColor[getWeponMenuItem.weponNumber-1];
+				selectedWepon = getWeponMenuItem.weponNumber;
 			}
+
 			Destroy (weponMenuItemObject [i]);
 		}
 	}
@@ -84,42 +134,35 @@ public class weponSystem : MonoBehaviour {
 	void OnMouseDown() {
 
 		weponMenuItem setWeponMenuItem;
-		float setPositionX, setPositionY;
 
+		float setPositionX, setPositionY;
+		Texture textureSize =  gameObject.renderer.material.mainTexture;
+
+		Vector3 screenMousePosition = Input.mousePosition;
+		Vector3 screenPosition 		= Camera.main.WorldToScreenPoint(this.transform.position);
+
+		weponMenuOpen = true;
+
+		Debug.Log(screenMousePosition);
+		
 		for (int i = 0; i < 6; i++) {          
 			float deg = 360 / 6 * i;
 			float radian = deg * Mathf.PI/180;
+			
+			setPositionX = (screenPosition.x - (textureSize.width/2))  + menuItemGap * Mathf.Cos(radian);
+			setPositionY = (screenPosition.y - (textureSize.height/2)+120) + menuItemGap * Mathf.Sin(radian);
+			//- 30 : z position 보정
 
-			setPositionX = this.transform.position.x + 3 * Mathf.Cos(radian);
-			setPositionY = this.transform.position.y + 3 * Mathf.Sin(radian);
+			weponMenuItemObject[i] = new GameObject("weponMenuItem" + (i+1));
 
-			weponMenuItemObject[i] = Instantiate (weponMenuItemPrefab, new Vector3 (setPositionX, setPositionY, 6),  Quaternion.Euler(90, 0, 0))as GameObject;
-			setWeponMenuItem = weponMenuItemObject[i].GetComponent<weponMenuItem>();
-			setWeponMenuItem.weponNumber = i + 1;
-			setWeponMenuItem.setColor = weponColor[i];
+			setWeponMenuItem = weponMenuItemObject[i].AddComponent<weponMenuItem>();
+
+			setWeponMenuItem.positionX = setPositionX;
+			setWeponMenuItem.positionY = setPositionY;
+			setWeponMenuItem.weponTexture = testT;
+			setWeponMenuItem.weponNumber  = i + 1;
+			setWeponMenuItem.setColor 	  = weponColor[i];
 		}
-
-		/*
-		weponMenuItemObject[0] = Instantiate (weponMenuItemPrefab, new Vector3 (this.transform.position.x - 6, this.transform.position.y + 2, 6),  Quaternion.Euler(90, 0, 0))as GameObject;
-		setWeponMenuItem = weponMenuItemObject[0].GetComponent<weponMenuItem>();
-		setWeponMenuItem.weponNumber = 1;
-		setWeponMenuItem.setColor = Color.green;
-
-		weponMenuItemObject[1] = Instantiate (weponMenuItemPrefab, new Vector3 (this.transform.position.x - 3, this.transform.position.y + 2, 6), Quaternion.Euler(90, 0, 0))as GameObject;
-		setWeponMenuItem = weponMenuItemObject[1].GetComponent<weponMenuItem>();
-		setWeponMenuItem.weponNumber = 2;
-		setWeponMenuItem.setColor = Color.red;
-
-		weponMenuItemObject[2] = Instantiate (weponMenuItemPrefab, new Vector3 (this.transform.position.x, this.transform.position.y + 2, 6), Quaternion.Euler(90, 0, 0))as GameObject;
-		setWeponMenuItem = weponMenuItemObject[2].GetComponent<weponMenuItem>();
-		setWeponMenuItem.weponNumber = 3;
-		setWeponMenuItem.setColor = Color.blue;
-
-		weponMenuItemObject[3] = Instantiate (weponMenuItemPrefab, new Vector3 (this.transform.position.x + 3, this.transform.position.y + 2, 6), Quaternion.Euler(90, 0, 0))as GameObject;
-		setWeponMenuItem = weponMenuItemObject[3].GetComponent<weponMenuItem>();
-		setWeponMenuItem.weponNumber = 4;
-		setWeponMenuItem.setColor = Color.gray;
-		*/
 	}
 
 }

@@ -2,33 +2,41 @@
 using System.Collections;
 
 public class StageManagment : MonoBehaviour {
-	public int deadCount;
+	bool isFin;
 	// Use this for initialization
 	void Start () {
-		deadCount = 0;
-		updateUi();
+		isFin = false;
 	}
 
-	public void updateUi()
-	{
-		GameObject castleHpMaxNumberObejct = GameObject.Find("castleHpMaxNumber");
-		castleHpMaxNumberObejct.transform.guiText.text = gameManagment.Instance.getCastleHpMax().ToString();
-		
-		GameObject castleHpNumberObejct = GameObject.Find("castleHpNumber");
-		castleHpNumberObejct.transform.guiText.text = gameManagment.Instance.getCastleHp().ToString();
+	public void Finished () {
+		isFin = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(deadCount >= 10){
+		if(isFin){
 			gameManagment.Instance.nextDay();
-			gameManagment.Instance.setGold(gameManagment.Instance.getGold() + 30);
 			Application.LoadLevel("StoreScene");
-			deadCount = 0;
+			isFin = false;
 		}
 
 		if(gameManagment.Instance.getCastleHp() < 0){
 			Application.LoadLevel("GameOverScene");
 		}
+	}
+
+	void OnGUI()
+	{
+		float maxHealth = gameManagment.Instance.getCastleHpMax();
+		float curHealth = gameManagment.Instance.getCastleHp();
+		float maxMp		= gameManagment.Instance.getMpMax();
+		float mp		= gameManagment.Instance.getMp();
+		
+		GUI.Box(new Rect( 15 , 10 , (Screen.width / 3)  / ( maxHealth / curHealth ) , 20 ), "");
+		GUI.Box(new Rect( 15 , 10 , (Screen.width / 3) , 20 ) , curHealth + "/" + maxHealth );
+		
+		GUI.Box(new Rect( 15 , 40 , (Screen.width / 3)  / ( maxMp / mp ) , 20 ) , "" );
+		GUI.Box(new Rect( 15 , 40 , (Screen.width / 3), 20 ) , mp + "/" + maxMp);
+		
 	}
 }

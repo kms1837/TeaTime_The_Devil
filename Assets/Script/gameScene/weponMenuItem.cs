@@ -4,10 +4,24 @@ using System.Collections;
 public class weponMenuItem : MonoBehaviour {
 	public int weponNumber;
 	public Color setColor;
+	public float positionX, positionY;
+	public Texture weponTexture;
+	public bool mouseOver;
+	public int size;
 
 	// Use this for initialization
 	void Start () {
-		
+		//mouseOver = false;
+		size = 50;
+	}
+
+	void OnGUI()
+	{
+		if(weponTexture != null){
+			if(mouseOver) GUI.color = setColor;
+			//positionY
+			GUI.DrawTexture(new Rect(positionX, positionY, size, size), weponTexture, ScaleMode.StretchToFill, true);
+		}
 	}
 
 	// Update is called once per frame
@@ -18,11 +32,11 @@ public class weponMenuItem : MonoBehaviour {
 	}
 
 	void OnMouseOver() {
-		gameObject.renderer.material.color = setColor;
+		//gameObject.renderer.material.color = setColor;
 	}
 
 	void OnMouseExit() {
-		gameObject.renderer.material.color = Color.white;
+		//gameObject.renderer.material.color = Color.white;
 	}
 
 	void OnMouseDown() {

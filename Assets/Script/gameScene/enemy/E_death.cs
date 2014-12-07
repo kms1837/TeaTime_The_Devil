@@ -21,9 +21,9 @@ public class E_death : MonoBehaviour {
 
 		if (hp == 0) {
 			//사망로직
-			GameObject stageObejct = GameObject.Find("MainCamera");
-			StageManagment stageManagment = stageObejct.GetComponent<StageManagment>();
-			stageManagment.deadCount++;
+			GameObject copier = GameObject.FindWithTag("copier");
+			copier.SendMessage("countMinus");
+			gameManagment.Instance.setGold(gameManagment.Instance.getGold() + 1);
 
 			Destroy (gameObject);
 		}
