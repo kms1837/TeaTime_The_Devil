@@ -17,7 +17,7 @@ public class E_move : MonoBehaviour {
 	void Update ()
 	{
 		//if (transform.position.y <= 2.0f) {
-		if (transform.position.y <= 3.0f) {
+		if (transform.position.y <= 4.0f) {
 			E_position = moveSpeed * Time.deltaTime;
 			transform.Translate (E_position, 0, 0);
 			Vector3 rePosition = new Vector3 (transform.position.x, transform.position.y, 0f);

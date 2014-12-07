@@ -12,7 +12,9 @@ public class weponMenuItem : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//mouseOver = false;
-		size = 50;
+		size = 40;
+		float castleHp = gameManagment.Instance.getCastleHp();
+		gameManagment.Instance.setCastleHp(castleHp-1.0f);
 	}
 
 	void OnGUI()
@@ -20,6 +22,8 @@ public class weponMenuItem : MonoBehaviour {
 		if(weponTexture != null){
 			if(mouseOver) GUI.color = setColor;
 			//positionY
+
+			GUI.Box(new Rect(positionX, positionY, size, size), weponTexture);
 			GUI.DrawTexture(new Rect(positionX, positionY, size, size), weponTexture, ScaleMode.StretchToFill, true);
 		}
 	}

@@ -10,7 +10,12 @@ public class weponSystem : MonoBehaviour {
 	public GameObject firePrefab;
 	public GameObject weponMenuItemPrefab;
 
-	public Texture testT;
+	//public Texture testT;
+	public Texture fireT;
+	public Texture arrowT;
+	public Texture normalT;
+
+	public Texture[] weponTexture;
 
 	private int selectedWepon;
 	private bool arrowSwitch, fireSwitch, weponMenuOpen;
@@ -24,11 +29,12 @@ public class weponSystem : MonoBehaviour {
 
 	void Start () {
 		selectedWepon = 0;
-		weponMenuItemObject = new GameObject[6];
-		weponColor  = new Color[]{Color.green, Color.red, Color.blue, Color.gray, Color.black, Color.green};
-		arrowSwitch = true;
-		fireSwitch  = true;
-		menuItemGap = 60;
+		weponMenuItemObject = new GameObject[3];
+		weponColor   = new Color[]{Color.green, Color.red, Color.blue, Color.gray, Color.black, Color.green};
+		weponTexture = new Texture[]{arrowT, fireT, normalT, normalT, normalT, normalT, normalT, normalT};
+		arrowSwitch  = true;
+		fireSwitch   = true;
+		menuItemGap  = 60;
 	}
 
 	void Update () {
@@ -145,23 +151,23 @@ public class weponSystem : MonoBehaviour {
 
 		Debug.Log(screenMousePosition);
 		
-		for (int i = 0; i < 6; i++) {          
-			float deg = 360 / 6 * i;
+		for (int i = 0; i < 3; i++) {          
+			float deg = 360 / 3 * i;
 			float radian = deg * Mathf.PI/180;
 			
 			setPositionX = (screenPosition.x - (textureSize.width/2))  + menuItemGap * Mathf.Cos(radian);
-			setPositionY = (screenPosition.y - (textureSize.height/2)+120) + menuItemGap * Mathf.Sin(radian);
+			setPositionY = (screenPosition.y - (textureSize.height/2)+180) + menuItemGap * Mathf.Sin(radian);
 			//- 30 : z position 보정
 
 			weponMenuItemObject[i] = new GameObject("weponMenuItem" + (i+1));
 
 			setWeponMenuItem = weponMenuItemObject[i].AddComponent<weponMenuItem>();
 
-			setWeponMenuItem.positionX = setPositionX;
-			setWeponMenuItem.positionY = setPositionY;
-			setWeponMenuItem.weponTexture = testT;
-			setWeponMenuItem.weponNumber  = i + 1;
-			setWeponMenuItem.setColor 	  = weponColor[i];
+			setWeponMenuItem.positionX		= setPositionX;
+			setWeponMenuItem.positionY		= setPositionY;
+			setWeponMenuItem.weponTexture	= weponTexture[i];
+			setWeponMenuItem.weponNumber 	= i + 1;
+			setWeponMenuItem.setColor 	 	= weponColor[i];
 		}
 	}
 
