@@ -37,6 +37,17 @@ public class weponSystem : MonoBehaviour {
 		menuItemGap  = 60;
 	}
 
+	bool shotMagic(float inputMp)
+	{
+		float mp = gameManagment.Instance.getMp();
+		if((mp-inputMp) >= 0){
+			gameManagment.Instance.setMp(mp-inputMp);
+			return true;
+		}
+
+		return false;
+	}
+
 	void Update () {
 
 		if(weponMenuOpen) {
@@ -73,31 +84,35 @@ public class weponSystem : MonoBehaviour {
 			switch(selectedWepon){
 				case 1:{
 					if(arrowSwitch){
-						Invoke("arrowCoolingTime", 1.0f);
+						if(shotMagic(1.0f)){
+							Invoke("arrowCoolingTime", 1.0f);
 
-						float arrowRotation = (180/Mathf.PI) * Mathf.Atan2 (worldMousePosition.y-transform.position.y, worldMousePosition.x-transform.position.x);
-						GameObject weponObject = Instantiate (arrowPrefab, new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z), transform.rotation)as GameObject;
-						arrow arrowObject = (arrow)weponObject.GetComponent<arrow>();
-						arrowObject.mousePosition = worldMousePosition;
-						arrowObject.arrowRotation = arrowRotation;
+							float arrowRotation = (180/Mathf.PI) * Mathf.Atan2 (worldMousePosition.y-transform.position.y, worldMousePosition.x-transform.position.x);
+							GameObject weponObject = Instantiate (arrowPrefab, new Vector3 (this.transform.position.x, this.transform.position.y, this.transform.position.z), transform.rotation)as GameObject;
+							arrow arrowObject = (arrow)weponObject.GetComponent<arrow>();
+							arrowObject.mousePosition = worldMousePosition;
+							arrowObject.arrowRotation = arrowRotation;
 
-						gameObject.renderer.material.color = Color.white;
-						selectedWepon = 3;	
+							gameObject.renderer.material.color = Color.white;
+							selectedWepon = 3;	
 
-						arrowSwitch = false;
+							arrowSwitch = false;
+						}
 					}
 					break;
 				}//arrow
 				case 2:{
 					if(fireSwitch){
-						Invoke("fireCoolingTime", 3.0f);
+						if(shotMagic(10.0f)){
+							Invoke("fireCoolingTime", 3.0f);
 
-						GameObject weponObject = Instantiate (firePrefab, new Vector3 (worldMousePosition.x, worldMousePosition.y, this.transform.position.z), Quaternion.Euler(-90, 0, 0))as GameObject;
-						
-						gameObject.renderer.material.color = Color.white;
-						selectedWepon = 3;
+							GameObject weponObject = Instantiate (firePrefab, new Vector3 (worldMousePosition.x, worldMousePosition.y, this.transform.position.z), Quaternion.Euler(-90, 0, 0))as GameObject;
+							
+							gameObject.renderer.material.color = Color.white;
+							selectedWepon = 3;
 
-						fireSwitch = false;
+							fireSwitch = false;
+						}
 					}
 					break;
 				}//fire
