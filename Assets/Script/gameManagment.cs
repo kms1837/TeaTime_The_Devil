@@ -29,7 +29,7 @@ public class gameManagment : MonoBehaviour {
 			return _instance;
 		}
 	}
-
+	/*
 	public int slavePoint
 	{
 		get{
@@ -40,7 +40,7 @@ public class gameManagment : MonoBehaviour {
 			slavePoint = value;
 		}
 	}
-
+	*/
 	public float getCastleHp()	  { return castleHp; }
 	public float getCastleHpMax() { return castleHpMax; }
 	public float getMp()	 	  { return mp; }
@@ -60,9 +60,9 @@ public class gameManagment : MonoBehaviour {
 		//Screen.SetResolution(Screen.width, Screen.width/16*9, true);
 		castleHp 	= 100.0f;
 		castleHpMax = 100.0f;
-		slavePoint  = 0;
-		mp = 100;
-		mpMax = 100;
+		//slavePoint  = 0;
+		mp = 100.0f;
+		mpMax = 100.0f;
 		day  = 1;
 		gold = 0;
 		Debug.Log("create");

@@ -3,8 +3,9 @@ using System.Collections;
 
 public class StageManagment : MonoBehaviour {
 	bool isFin;
-	private Texture2D hpTexture;
-	private Texture2D mpTexture;
+	public Texture2D hpTexture;
+	public Texture2D mpTexture;
+	public Texture2D backTexture;
 
 	float hpWight;
 	float mpWight;
@@ -18,10 +19,9 @@ public class StageManagment : MonoBehaviour {
 
 		isFin = false;
 		hpWight = (Screen.width / 3)  / ( maxHealth / curHealth );
-		hpTexture = MakeTex( (int)hpWight , 20, Color.red);
-
 		mpWight = (Screen.width / 3)  / ( maxMp / mp );
-		mpTexture = MakeTex((int)mpWight, 20, Color.blue);
+
+		Debug.Log(mp);
 	}
 
 	public void Finished () {
@@ -40,21 +40,6 @@ public class StageManagment : MonoBehaviour {
 			Application.LoadLevel("GameOverScene");
 		}
 	}
-
-	private Texture2D MakeTex( int width, int height, Color col )
-	{
-		Color[] pix = new Color[width * height];
-		for( int i = 0; i < pix.Length; ++i )
-		{
-			pix[ i ] = col;
-		}
-		Texture2D result = new Texture2D( width, height );
-		result.SetPixels( pix );
-		result.Apply();
-
-		return result;
-	}
-
 	void OnGUI()
 	{
 		float maxHealth = gameManagment.Instance.getCastleHpMax();
@@ -62,17 +47,23 @@ public class StageManagment : MonoBehaviour {
 		float maxMp		= gameManagment.Instance.getMpMax();
 		float mp		= gameManagment.Instance.getMp();
 
-		GUIStyle hpStyle = new GUIStyle( GUI.skin.box ); 
-		GUIStyle mpStyle = new GUIStyle( GUI.skin.box ); 
+		GUIStyle hpStyle = new GUIStyle( GUI.skin.box );
+		GUIStyle mpStyle = new GUIStyle( GUI.skin.box );
+		GUIStyle backStyle = new GUIStyle( GUI.skin.box );
 
-		GUI.Box(new Rect( 15 , 10 , (Screen.width / 3)  / ( maxHealth / curHealth ) , 30 ), "", hpStyle);
-		GUI.Box(new Rect( 15 , 10 , (Screen.width / 3) , 30 ) , curHealth + " / " + maxHealth );
+		backStyle.normal.background = backTexture;
 
 		hpStyle.normal.background = hpTexture;
+
+		GUI.skin.box.normal.textColor = Color.black;
+
+		GUI.Box(new Rect( 15 , 10 , (Screen.width / 4) , 50 ) , "", backStyle);
+		GUI.Box(new Rect( 15 , 10 , (Screen.width / 4)  / ( maxHealth / curHealth ) , 50 ), curHealth + " / " + maxHealth, hpStyle);
+
 		mpStyle.normal.background = mpTexture;
 
-		GUI.Box(new Rect( 15 , 50 , (Screen.width / 3)  / ( maxMp / mp ) , 30 ) , "", mpStyle);
-		GUI.Box(new Rect( 15 , 50 , (Screen.width / 3), 30 ) , mp + " / " + maxMp);
+		GUI.Box(new Rect( 15 , 80 , (Screen.width / 4), 50 ), "", backStyle);
+		GUI.Box(new Rect( 15 , 80 , (Screen.width / 4)  / ( maxMp / mp ) , 50 ) , mp + " / " + maxMp, mpStyle);
 		
 	}
 }
