@@ -34,7 +34,7 @@ public class weponSystem : MonoBehaviour {
 		weponTexture = new Texture[]{arrowT, fireT, normalT, normalT, normalT, normalT, normalT, normalT};
 		arrowSwitch  = true;
 		fireSwitch   = true;
-		menuItemGap  = 60;
+		menuItemGap  = 80;
 	}
 
 	bool shotMagic(float inputMp)
@@ -53,6 +53,7 @@ public class weponSystem : MonoBehaviour {
 		if(weponMenuOpen) {
 			weponMenuItem getWeponMenuItem;
 			float itemPositionX, itemPositionY;
+			int objectSize;
 
 			Vector3 screenMousePosition = Input.mousePosition;
 
@@ -60,10 +61,11 @@ public class weponSystem : MonoBehaviour {
 				getWeponMenuItem = weponMenuItemObject[i].GetComponent<weponMenuItem>();
 				itemPositionX 	 = getWeponMenuItem.positionX;
 				itemPositionY 	 = Screen.height - getWeponMenuItem.positionY;
+				objectSize 		 = getWeponMenuItem.size;
 				//스크린 좌표계의 최상단은 스크린 높이를 600이라 하면 ex)(0, 600) 이지만 drawTexture는 최상단이 (0, 0)기준으로 그린다.
 
-				if(	  screenMousePosition.x >= itemPositionX && screenMousePosition.x <= itemPositionX + 50
-				   && screenMousePosition.y <= itemPositionY && screenMousePosition.y >= itemPositionY - 50)
+				if(	  screenMousePosition.x >= itemPositionX && screenMousePosition.x <= itemPositionX + objectSize
+				   && screenMousePosition.y <= itemPositionY && screenMousePosition.y >= itemPositionY - objectSize)
 				{
 					getWeponMenuItem.mouseOver = true;
 				}else{
@@ -72,7 +74,7 @@ public class weponSystem : MonoBehaviour {
 			}
 		}
 
-		if (Input.GetMouseButtonDown (0)) {
+		if (Input.GetMouseButtonDown (0) && !weponMenuOpen) {
 			//Vector3 originMousePosition = Input.mousePosition;
 			//originMousePosition.z = 26;
 			//Vector3 worldMousePosition = Camera.main.ScreenToWorldPoint(originMousePosition);
@@ -124,6 +126,7 @@ public class weponSystem : MonoBehaviour {
 
 		weponMenuItem getWeponMenuItem;
 		float itemPositionX, itemPositionY;
+		int objectSize;
 
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
@@ -139,9 +142,10 @@ public class weponSystem : MonoBehaviour {
 			itemPositionX = getWeponMenuItem.positionX;
 			itemPositionY = Screen.height - getWeponMenuItem.positionY;
 			//스크린 좌표계의 최상단은 스크린 높이를 600이라 하면 ex)(0, 600) 이지만 drawTexture는 최상단이 (0, 0)기준으로 그린다.
+			objectSize = getWeponMenuItem.size;
 
-			if(	  screenMousePosition.x >= itemPositionX && screenMousePosition.x <= itemPositionX + 50
-			   && screenMousePosition.y <= itemPositionY && screenMousePosition.y >= itemPositionY - 50)
+			if(	  screenMousePosition.x >= itemPositionX && screenMousePosition.x <= itemPositionX + objectSize
+			   && screenMousePosition.y <= itemPositionY && screenMousePosition.y >= itemPositionY - objectSize)
 			{
 
 				gameObject.renderer.material.color = weponColor[getWeponMenuItem.weponNumber-1];
@@ -157,21 +161,24 @@ public class weponSystem : MonoBehaviour {
 		weponMenuItem setWeponMenuItem;
 
 		float setPositionX, setPositionY;
-		Texture textureSize =  gameObject.renderer.material.mainTexture;
+
+		Vector3 objectBounds = gameObject.renderer.bounds.size;
+		Vector3 objectSize   = Camera.main.WorldToScreenPoint(objectBounds);
 
 		Vector3 screenMousePosition = Input.mousePosition;
 		Vector3 screenPosition 		= Camera.main.WorldToScreenPoint(this.transform.position);
 
 		weponMenuOpen = true;
 
-		Debug.Log(screenMousePosition);
+		Debug.Log(objectBounds);
 		
 		for (int i = 0; i < 3; i++) {          
 			float deg = 360 / 3 * i;
 			float radian = deg * Mathf.PI/180;
-			
-			setPositionX = (screenPosition.x - (textureSize.width/2))  + menuItemGap * Mathf.Cos(radian);
-			setPositionY = (screenPosition.y - (textureSize.height/2)+180) + menuItemGap * Mathf.Sin(radian);
+			//+ (objectBounds.x/2)
+			// - (objectBounds.y/2)
+			setPositionX = (screenPosition.x-25) + menuItemGap * Mathf.Cos(radian);
+			setPositionY = (screenPosition.y-25) + menuItemGap * Mathf.Sin(radian);
 			//- 30 : z position 보정
 
 			weponMenuItemObject[i] = new GameObject("weponMenuItem" + (i+1));
@@ -183,6 +190,7 @@ public class weponSystem : MonoBehaviour {
 			setWeponMenuItem.weponTexture	= weponTexture[i];
 			setWeponMenuItem.weponNumber 	= i + 1;
 			setWeponMenuItem.setColor 	 	= weponColor[i];
+			setWeponMenuItem.size			= 40;
 		}
 	}
 

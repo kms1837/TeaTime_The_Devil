@@ -12,9 +12,6 @@ public class weponMenuItem : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//mouseOver = false;
-		size = 40;
-		float castleHp = gameManagment.Instance.getCastleHp();
-		gameManagment.Instance.setCastleHp(castleHp-1.0f);
 	}
 
 	void OnGUI()

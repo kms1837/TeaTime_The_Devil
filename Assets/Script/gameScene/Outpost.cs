@@ -86,11 +86,11 @@ public class Outpost : MonoBehaviour
                 arrowObject.mousePosition = worldMousePosition;
                 arrowObject.arrowRotation = arrowRotation;
             }
-            Debug.Log( true );
+            //Debug.Log( true );
         }
         else
         {
-            Debug.Log( false );
+            //Debug.Log( false );
         }
         if ( 0 < m_nTickCount )
         {

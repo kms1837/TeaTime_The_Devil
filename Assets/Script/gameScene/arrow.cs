@@ -13,7 +13,7 @@ public class arrow : MonoBehaviour {
 
 	void Update () {
 		if (mousePosition != null) {
-			if(PositionX < 24 && PositionX > -24 && PositionY < 24 && PositionY > -24){ //PositionX != mousePosition.x || PositionY != mousePosition.y
+			if(PositionX < 35 && PositionX > -35 && PositionY < 35 && PositionY > -35){ //PositionX != mousePosition.x || PositionY != mousePosition.y
 				PositionX = PositionX + Mathf.Cos ((Mathf.PI/180)*arrowRotation); //(targetPosition.x-PositionX)/temp1;
 				PositionY = PositionY + Mathf.Sin ((Mathf.PI/180)*arrowRotation); //(targetPosition.y-PositionY)/temp1;
 				transform.position = new Vector3(PositionX, PositionY, transform.position.z);

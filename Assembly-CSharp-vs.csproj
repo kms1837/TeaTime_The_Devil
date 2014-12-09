@@ -46,6 +46,8 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Script\GameMgr.cs" />
+     <Compile Include="Assets\Script\PrologueScene\PrologueScene.cs" />
      <Compile Include="Assets\Script\gameManagment.cs" />
      <Compile Include="Assets\Script\gameScene\Castle.cs" />
      <Compile Include="Assets\Script\gameScene\Outpost.cs" />
